@@ -1,0 +1,32 @@
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+
+public class Program1_T3_Driver {
+
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		Job job = Job.getInstance(conf, "Program_T3 Map Reduce Job");
+		
+		job.setJarByClass(Program1_T3_Driver.class);
+		job.setMapperClass(Program1_T3_Mapper.class);
+		job.setReducerClass(Program1_T3_Reducer.class);
+
+		// Specify output types
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+
+		// Specify input and output DIRECTORIES (not files)
+		FileInputFormat.setInputPaths(job, new Path("hdfs://localhost:54310/user/hduser/Program1_T3/data"));
+		FileOutputFormat.setOutputPath(job, new Path("hdfs://localhost:54310/user/hduser/Program1_T3/output"));
+
+		if (!job.waitForCompletion(true))
+			return;
+	}
+
+}
