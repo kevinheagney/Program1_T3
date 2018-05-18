@@ -1,0 +1,36 @@
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class Program1_T3_Mapper extends
+		Mapper<LongWritable, Text, Text, IntWritable> {
+
+	public void map(LongWritable ikey, Text ivalue, Context context)
+			throws IOException, InterruptedException {
+		
+		String inString = ivalue.toString();
+		
+		String[] strArr = inString.split(",");
+		
+		// Treat field8 (gender) as a string
+		String field8 = strArr[7];
+		String field11 = strArr[10];
+		
+		// Read string field11 as float and convert to integer
+		float fField11 = Float.parseFloat(field11);
+		int iField11 = (int) fField11;
+		
+		// Read string field11 and convert to integer		
+		// int iField11 = Integer.parseInt(field11);
+		
+		Text outText = new Text(field8);
+		IntWritable outInt = new IntWritable(iField11);
+		
+		context.write(outText, outInt);
+
+	}
+
+}
